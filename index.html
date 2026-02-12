@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Be My Valentine ❤️</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0a1f4f;
+      touch-action: manipulation;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .page {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    img {
+      max-width: 88%;
+      max-height: 42vh;
+      object-fit: cover;
+      border-radius: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .title {
+      font-size: 1.65rem;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 1.15rem;
+      color: #ffe6ee;
+      text-align: center;
+      margin-bottom: 44px;
+      line-height: 1.4;
+    }
+
+    /* 🔒 BUTTON AREA */
+    .buttons {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      padding: 0 20px;
+    }
+
+    /* ✅ SAME SIZE & SHAPE */
+    .btn {
+      min-width: 150px;
+      padding: 14px 0;
+      font-size: 1.15rem;
+      font-weight: 600;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      text-align: center;
+      transition: transform 0.25s ease;
+    }
+
+    #yesBtn {
+      background: #ff9ad4;
+      color: black;
+      box-shadow: 0 5px 18px rgba(255,105,180,0.5);
+      position: relative;
+    }
+
+    #yesBtn:active {
+      transform: scale(0.94);
+    }
+
+    #noBtn {
+      background: #3a3a3a;
+      color: white;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+      position: absolute;
+      left: calc(50% + 90px);
+      top: 0;
+    }
+
+    #celebrate {
+      display: none;
+      background: radial-gradient(circle at top, #0a1f4f, #02142b);
+      flex-direction: column;
+    }
+
+    #thankYou {
+      font-size: 2rem;
+      margin: 30px 0 36px;
+      text-align: center;
+    }
+
+    .message {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      text-align: center;
+      padding: 0 28px;
+      margin-bottom: 36px;
+      color: #eee;
+    }
+
+    /* 💖 FLOATING HEARTS */
+    .heart {
+      position: absolute;
+      bottom: -40px;
+      pointer-events: none;
+      animation: rise linear forwards;
+      z-index: 999;
+    }
+
+    @keyframes rise {
+      from {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-150vh);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="question" class="page">
+    <img src="her.jpg" alt="Her">
+
+    <h1 class="title">Fulfillment, my Moonlight ✨</h1>
+    <h2 class="subtitle">Will you be my Valentine? 💖</h2>
+
+    <div class="buttons" id="btnArea">
+      <button id="yesBtn" class="btn">YES 💘</button>
+      <button id="noBtn" class="btn">NO 😭</button>
+    </div>
+
+   <audio id="song1" src="songs/song1.mp3" loop preload="auto"></audio>
+  </div>
+
+  <div id="celebrate" class="page">
+    <h1 id="thankYou">Thank you❤️✨</h1>
+
+    <p class="message">
+      From the moment you came into my life, everything became brighter.<br><br>
+      I really do wish for everything to work out beautifully for us — today, tomorrow, and always i chose you, My Moonlight❤️
+    </p>
+
+    <img src="celebrate.jpg" alt="Celebration">
+  ‎<audio id="song2" src="songs/song2.mp3" loop preload="auto"></audio>
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const question = document.getElementById("question");
+    const celebrate = document.getElementById("celebrate");
+    const song1 = document.getElementById("song1");
+    const song2 = document.getElementById("song2");
+
+    const positions = [
+      { x: 5,  y: 0 },
+      { x: 65, y: -30 },
+      { x: 20, y: 40 },
+      { x: 70, y: 35 },
+      { x: 35, y: -50 },
+      { x: 80, y: 10 },
+      { x: 15, y: 55 },
+      { x: 60, y: 50 }
+    ];
+
+    let index = 0;
+
+    function moveNo() {
+      const pos = positions[index];
+      noBtn.style.left = pos.x + "%";
+      noBtn.style.top  = pos.y + "px";
+      index = (index + 1) % positions.length;
+    }
+
+    ["touchstart", "pointerdown", "mousedown", "click"].forEach(evt => {
+  noBtn.addEventListener(evt, e => {
+    moveNo();
+  });
+});
+
+    yesBtn.addEventListener("click", () => {
+  question.style.display = "none";
+  celebrate.style.display = "flex";
+
+  crossFade(song1, song2, 2500); // 2.5s smooth crossfade
+
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.textContent = Math.random() > 0.5 ? "❤️" : "✨";
+    heart.style.left = (Math.random() * 90 + 5) + "vw";
+    heart.style.fontSize = (18 + Math.random() * 32) + "px";
+    heart.style.animationDuration = (4 + Math.random() * 6) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 10000);
+  }, 220);
+});
+
+  function crossFade(fromSong, toSong, duration = 2000) {
+  const steps = 40;
+  const intervalTime = duration / steps;
+  let step = 0;
+
+  toSong.volume = 0;
+  toSong.play().catch(() => {});
+
+  const fadeInterval = setInterval(() => {
+    step++;
+
+    fromSong.volume = Math.max(0, 1 - step / steps);
+    toSong.volume = Math.min(1, step / steps);
+
+    if (step >= steps) {
+      clearInterval(fadeInterval);
+      fromSong.pause();
+      fromSong.currentTime = 0;
+    }
+  }, intervalTime);
+}
+  
+function startFirstPageMusic() {
+  if (song1.paused) {
+    song1.volume = 1;
+    song1.play().catch(() => {});
+  }
+}
+
+["click", "touchstart", "pointerdown"].forEach(evt => {
+  document.body.addEventListener(evt, startFirstPageMusic, { once: true });
+});
+  </script>
+
+</body>
+</html>
