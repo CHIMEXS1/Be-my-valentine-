@@ -179,88 +179,66 @@
   </div>
 
   <script>
-    const yesBtn = document.getElementById("yesBtn");
-    const noBtn = document.getElementById("noBtn");
-    const question = document.getElementById("question");
-    const celebrate = document.getElementById("celebrate");
-    const song1 = document.getElementById("song1");
-    const song2 = document.getElementById("song2");
+const song1 = document.getElementById('song1');
+const song2 = document.getElementById('song2');
 
-    const positions = [
-      { x: 5,  y: 0 },
-      { x: 65, y: -30 },
-      { x: 20, y: 40 },
-      { x: 70, y: 35 },
-      { x: 35, y: -50 },
-      { x: 80, y: 10 },
-      { x: 15, y: 55 },
-      { x: 60, y: 50 }
-    ];
-
-    let index = 0;
-
-    function moveNo() {
-      const pos = positions[index];
-      noBtn.style.left = pos.x + "%";
-      noBtn.style.top  = pos.y + "px";
-      index = (index + 1) % positions.length;
-    }
-
-    ["touchstart", "pointerdown", "mousedown", "click"].forEach(evt => {
-  noBtn.addEventListener(evt, e => {
-    moveNo();
-  });
-});
-
-    yesBtn.addEventListener("click", () => {
-  question.style.display = "none";
-  celebrate.style.display = "flex";
-
-  crossFade(song1, song2, 2500); // 2.5s smooth crossfade
-
-  setInterval(() => {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.textContent = Math.random() > 0.5 ? "❤️" : "✨";
-    heart.style.left = (Math.random() * 90 + 5) + "vw";
-    heart.style.fontSize = (18 + Math.random() * 32) + "px";
-    heart.style.animationDuration = (4 + Math.random() * 6) + "s";
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 10000);
-  }, 220);
-});
-
-  function crossFade(fromSong, toSong, duration = 2000) {
-  const steps = 40;
-  const intervalTime = duration / steps;
-  let step = 0;
-
-  toSong.volume = 0;
-  toSong.play().catch(() => {});
-
-  const fadeInterval = setInterval(() => {
-    step++;
-
-    fromSong.volume = Math.max(0, 1 - step / steps);
-    toSong.volume = Math.min(1, step / steps);
-
-    if (step >= steps) {
-      clearInterval(fadeInterval);
-      fromSong.pause();
-      fromSong.currentTime = 0;
-    }
-  }, intervalTime);
-}
-  
 function startFirstPageMusic() {
   if (song1.paused) {
-    song1.volume = 1;
-    song1.play().catch(() => {});
+    song1.volume = 0.7;
+    song1.play().catch(err => {
+      console.log('Audio play blocked:', err);
+    });
   }
 }
 
 ["click", "touchstart", "pointerdown"].forEach(evt => {
   document.body.addEventListener(evt, startFirstPageMusic, { once: true });
+});
+
+const yesBtn = document.getElementById('yesBtn');
+const question = document.getElementById('question');
+const celebrate = document.getElementById('celebrate');
+
+yesBtn.addEventListener("click", () => {
+  question.style.display = "none";
+  celebrate.style.display = "flex";
+
+  song1.pause();
+  song1.currentTime = 0;
+
+  song2.volume = 0.8;
+  song2.play().catch(() => {});
+});
+  </script><script>
+const song1 = document.getElementById('song1');
+const song2 = document.getElementById('song2');
+
+function startFirstPageMusic() {
+  if (song1.paused) {
+    song1.volume = 0.7;
+    song1.play().catch(err => {
+      console.log('Audio play blocked:', err);
+    });
+  }
+}
+
+["click", "touchstart", "pointerdown"].forEach(evt => {
+  document.body.addEventListener(evt, startFirstPageMusic, { once: true });
+});
+
+const yesBtn = document.getElementById('yesBtn');
+const question = document.getElementById('question');
+const celebrate = document.getElementById('celebrate');
+
+yesBtn.addEventListener("click", () => {
+  question.style.display = "none";
+  celebrate.style.display = "flex";
+
+  song1.pause();
+  song1.currentTime = 0;
+
+  song2.volume = 0.8;
+  song2.play().catch(() => {});
 });
   </script>
 
